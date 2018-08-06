@@ -15,23 +15,27 @@ public class Trie {
         StringBuilder currentValue = new StringBuilder();
         TrieNode currentNode = rootNode;
 
-        for (char aWordArray : wordArray) {
+        for (char wordChar : wordArray) {
             currentDepth++;
 
             // in each loop iteration we form the Trie values i.e. for the word "now"
             // we add "n" in the first layer, "no" in the second, and "now" in the third one
-            currentValue.append(aWordArray);
+            currentValue.append(wordChar);
             String subWord = currentValue.toString();
 
             // if the current sub word is not in the map, include it
             if (!currentNode.getChildren().containsKey(subWord)) {
+                TrieNode auxNode;
                 // if the current sub word is as long as the genuine word it is a leaf node
                 if (subWord.length() == word.length()) {
-                    currentNode.addChild(subWord, new TrieNode(subWord, true, currentDepth));
+                    auxNode = new TrieNode(subWord, true, currentDepth);
 
                 } else {
-                    currentNode.addChild(subWord, new TrieNode(subWord, false, currentDepth));
+                    auxNode = new TrieNode(subWord, false, currentDepth);
                 }
+
+                currentNode.addChild(subWord, auxNode);
+                currentNode = auxNode;
 
                 // if the current sub word is in the map, keep going deeper
             } else {
