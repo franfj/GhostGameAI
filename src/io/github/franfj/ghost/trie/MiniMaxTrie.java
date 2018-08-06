@@ -1,13 +1,13 @@
-package io.github.franfj.ghost;
+package io.github.franfj.ghost.trie;
 
-public class Trie {
+public class MiniMaxTrie {
 
     private static final int MIN_WORD_LENGTH = 3;
 
-    TrieNode rootNode;
+    MiniMaxTrieNode rootNode;
 
-    public Trie() {
-        this.rootNode = new TrieNode("", false, 0);
+    public MiniMaxTrie() {
+        this.rootNode = new MiniMaxTrieNode("", false, 0);
     }
 
     public void addWord(String word) {
@@ -19,25 +19,25 @@ public class Trie {
 
         int currentDepth = 0;
         StringBuilder currentValue = new StringBuilder();
-        TrieNode currentNode = rootNode;
+        MiniMaxTrieNode currentNode = rootNode;
 
         for (char wordChar : wordArray) {
             currentDepth++;
 
-            // in each loop iteration we form the Trie values i.e. for the word "now"
+            // in each loop iteration we form the MiniMaxTrie values i.e. for the word "now"
             // we add "n" in the first layer, "no" in the second, and "now" in the third one
             currentValue.append(wordChar);
             String subWord = currentValue.toString();
 
             // if the current sub word is not in the map, include it
             if (!currentNode.getChildren().containsKey(subWord)) {
-                TrieNode auxNode;
+                MiniMaxTrieNode auxNode;
                 // if the current sub word is as long as the genuine word it is a leaf node
                 if (subWord.length() == word.length()) {
-                    auxNode = new TrieNode(subWord, true, currentDepth);
+                    auxNode = new MiniMaxTrieNode(subWord, true, currentDepth);
 
                 } else {
-                    auxNode = new TrieNode(subWord, false, currentDepth);
+                    auxNode = new MiniMaxTrieNode(subWord, false, currentDepth);
                 }
 
                 currentNode.addChild(subWord, auxNode);
@@ -54,8 +54,8 @@ public class Trie {
         rootNode.calculateHeuristicValue();
     }
 
-    public TrieNode getBestMove(String playerMove) {
-        return rootNode.getBestMove(playerMove);
+    public MiniMaxTrieNode getRootNode() {
+        return rootNode;
     }
 
 }
