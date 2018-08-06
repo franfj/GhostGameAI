@@ -8,7 +8,7 @@ public class TrieNode {
     private String value;
     private boolean leaf;
     private int depth;
-    private int heuristicValue;
+    private double heuristicValue;
 
     private Map<String, TrieNode> children;
 
@@ -20,6 +20,74 @@ public class TrieNode {
         this.depth = depth;
 
         this.heuristicValue = 0;
+    }
+
+    public double calculateHeuristicValue() {
+        if (this.value.contains("abalienate")) {
+            int a = 0;
+        }
+        if (this.isLeaf()) {
+            if (this.depth % 2 == 0) {
+                this.heuristicValue = -1;
+            } else {
+                this.heuristicValue = 1;
+            }
+
+            // prune Trie
+            this.children.clear();
+
+        } else {
+            double result = 0.0;
+            double pathsToGo = 0.0;
+//            if (this.depth % 2 == 0) {
+//                result = -1;
+//            } else {
+//                result = 1;
+//            }
+
+            for (Map.Entry<String, TrieNode> entry : this.children.entrySet()) {
+                TrieNode value = entry.getValue();
+                double childHeuristicValue = value.calculateHeuristicValue();
+
+                if (childHeuristicValue > 0) {
+                    result += childHeuristicValue;
+                }
+                pathsToGo++;
+
+//                if (this.depth % 2 == 0 && childHeuristicValue > result) {
+//                    result = childHeuristicValue;
+//
+//                } else if (this.depth % 2 != 0 && childHeuristicValue < result) {
+//                    result = childHeuristicValue;
+//                }
+            }
+
+            this.heuristicValue = result / pathsToGo;
+        }
+
+        return this.heuristicValue;
+    }
+
+    public TrieNode getBestMove(String playerMove) {
+        TrieNode currentNode = this.getChildren().get(this.value + playerMove);
+        if (currentNode == null || currentNode.isLeaf()) {
+            System.out.println("Player lose");
+
+        } else {
+            double bestMoveHeuristicValue = 0.0;
+            TrieNode bestMove = null;
+
+            for (Map.Entry<String, TrieNode> entry : currentNode.children.entrySet()) {
+                TrieNode move = entry.getValue();
+                if (move.getHeuristicValue() > bestMoveHeuristicValue) {
+                    bestMoveHeuristicValue = move.getHeuristicValue();
+                    bestMove = entry.getValue();
+                }
+            }
+            return bestMove;
+
+        }
+        return currentNode;
     }
 
     public void addChild(String childValue, TrieNode child) {
@@ -50,11 +118,11 @@ public class TrieNode {
         this.depth = depth;
     }
 
-    public int getHeuristicValue() {
+    public double getHeuristicValue() {
         return heuristicValue;
     }
 
-    public void setHeuristicValue(int heuristicValue) {
+    public void setHeuristicValue(double heuristicValue) {
         this.heuristicValue = heuristicValue;
     }
 

@@ -28,7 +28,10 @@ class Test {
             e.printStackTrace();
         }
 
+        testTrie.calculateHeuristicValue();
+
         System.out.println(testTrie);
+
     }
 
 

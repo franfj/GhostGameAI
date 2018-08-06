@@ -2,6 +2,8 @@ package io.github.franfj.ghost;
 
 public class Trie {
 
+    private static final int MIN_WORD_LENGTH = 3;
+
     TrieNode rootNode;
 
     public Trie() {
@@ -9,6 +11,10 @@ public class Trie {
     }
 
     public void addWord(String word) {
+        if (word.length() < MIN_WORD_LENGTH) {
+            return;
+        }
+
         char[] wordArray = word.toCharArray();
 
         int currentDepth = 0;
@@ -42,6 +48,14 @@ public class Trie {
                 currentNode = currentNode.getChildren().get(subWord);
             }
         }
+    }
+
+    public void calculateHeuristicValue() {
+        rootNode.calculateHeuristicValue();
+    }
+
+    public TrieNode getBestMove(String playerMove) {
+        return rootNode.getBestMove(playerMove);
     }
 
 }
